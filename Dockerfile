@@ -13,6 +13,5 @@ WORKDIR $APP_HOME
 COPY notejam/django/requirements.txt ./
 RUN pip install -r requirements.txt
 RUN pip install psycopg2
-RUN pip install psycopg2-binary --no-binary psycopg2-binary
 
 EXPOSE 8000
