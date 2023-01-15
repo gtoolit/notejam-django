@@ -1,6 +1,11 @@
 pipeline{
     agent any
 
+     environment {
+        DOCKER_USER = credentials('docker_user')
+        DOCKER_PSWD = credentials('docker_password')
+    }
+
     stages{
         stage("Git Checkout"){
             steps{
@@ -10,7 +15,9 @@ pipeline{
         stage("Docker Image Build"){
             steps{
                 script {
-                    app = docker.build("nevis256/$JOB_NAME:latest")
+                    sh 'docker image build -t $JOB_NAME:v1.$BUILD_ID .'
+                    sh 'docker image tag $JOB_NAME:v1.$BUILD_ID nevis256/$JOB_NAME:v1.$BUILD_ID'
+                    sh 'docker image tag $JOB_NAME:v1.$BUILD_ID nevis256/$JOB_NAME:latest'
                 }
             }
         }
@@ -18,6 +25,16 @@ pipeline{
             steps{
                 script {
                     sh 'docker run nevis256/$JOB_NAME:latest ./manage.py test'
+                }
+            }
+        }
+
+        stage('Push Image to Dockerhub') {
+            steps{
+                script{
+                    sh 'docker login -u ${DOCKER_USER} -p ${DOCKER_PSWD}'
+                    sh 'docker image push nevis256/$JOB_NAME:v1.$BUILD_ID'
+                    sh 'docker image push nevis256/$JOB_NAME:latest'
                 }
             }
         }
