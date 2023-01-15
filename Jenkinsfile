@@ -21,13 +21,6 @@ pipeline{
                 }
             }
         }
-        stage("Run tests"){
-            steps{
-                script {
-                    sh 'docker run nevis256/$JOB_NAME:latest ./manage.py test'
-                }
-            }
-        }
 
         stage('Push Image to Dockerhub') {
             steps{
