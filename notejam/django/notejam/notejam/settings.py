@@ -10,16 +10,18 @@ ADMINS = (
     ('Sergey Komar', 'komarserjio@gmail.com'),
 )
 
+SOUTH_DATABASE_ADAPTERS = {'default':'south.db.postgresql_psycopg2'}
+
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'notejam.db',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'nj',
+        'USER': 'test',
+        'PASSWORD': 'admin@123',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
 
