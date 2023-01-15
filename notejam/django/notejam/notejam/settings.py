@@ -2,7 +2,7 @@ import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
 
 PROJECT_DIR = "{}/../".format(os.path.dirname(__file__))
 
@@ -18,7 +18,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'nj',
-        'USER': 'test',
+        'USER': 'admin',
         'PASSWORD': 'admin@123',
         'HOST': 'db',
         'PORT': '5432',
