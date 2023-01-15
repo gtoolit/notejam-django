@@ -10,7 +10,7 @@ pipeline{
         stage("Docker Image Build"){
             steps{
                 script {
-                    app = docker.build("nevis256/notejam:${env.BUILD_ID}")
+                    app = docker.build("nevis256/$JOB_NAME:latest")
                 }
             }
         }
