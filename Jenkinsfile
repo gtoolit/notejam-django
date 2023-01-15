@@ -17,7 +17,7 @@ pipeline{
         stage("Run tests"){
             steps{
                 script {
-                    sh 'docker run -it nevis256/notejam:${env.BUILD_ID} ./manage.py test'
+                    sh 'docker run -it nevis256/$JOB_NAME:latest ./manage.py test'
                 }
             }
         }
