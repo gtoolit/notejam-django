@@ -17,7 +17,7 @@ pipeline{
         stage("Run tests"){
             steps{
                 script {
-                    sh 'docker run -it nevis256/$JOB_NAME:latest ./manage.py test'
+                    sh 'docker run nevis256/$JOB_NAME:latest ./manage.py test'
                 }
             }
         }
