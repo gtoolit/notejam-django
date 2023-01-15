@@ -2,15 +2,22 @@ pipeline{
     agent any
 
     stages{
-        stage("git checkout code"){
+        stage("Checkout"){
             steps{
                 git branch: 'master', url: 'https://github.com/georgetoolit1/notejam-django.git'
             }
         }
-        stage("build docker image"){
+        stage("Build"){
             steps{
                 script {
-                    app = docker.build("nevis256/pipeline:${env.BUILD_ID}")
+                    app = docker.build("nevis256/notejam:${env.BUILD_ID}")
+                }
+            }
+        }
+        stage("Run tests"){
+            steps{
+                step {
+                    sh 'docker run -it nevis256/notejam:${env.BUILD_ID} ./manage.py test'
                 }
             }
         }
