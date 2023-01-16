@@ -2,7 +2,7 @@ import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [*]
 
 PROJECT_DIR = "{}/../".format(os.path.dirname(__file__))
 
@@ -20,7 +20,7 @@ DATABASES = {
         'NAME': 'test',
         'USER': 'test',
         'PASSWORD': 'admin@123',
-        'HOST': 'db',
+        'HOST': 'db-postgres-service',
         'PORT': '5432',
     }
 }
