@@ -1,0 +1,76 @@
+---
+# Deployment for the Django-Python application container
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notejam-django
+  namespace: ladit
+  labels:
+    app: notejam-django
+spec:
+  selector:
+    matchLabels:
+      app: notejam-django
+  template:
+    metadata:
+      labels:
+        app: notejam-django
+    spec:
+      containers:
+      - name: notejam-django
+        image: nevis256/django-notejam-cicd:v256
+        args:
+          - bash
+          - -c
+          - python manage.py syncdb --noinput && python manage.py migrate && python manage.py runserver 0.0.0.0:8000
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-db-credentials
+                key: user
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-db-credentials
+                key: password
+          - name: POSTGRES_DB
+            value: 'postgres'
+          - name: DATABASE_URL
+            value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgresql:5432/$(POSTGRES_DB)
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgresql-volume-mount
+      volumes:
+        - name: postgresql-volume-mount
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
+
+---
+# Service for the Django-Python application container
+apiVersion: v1
+kind: Service
+metadata:
+  name: notejam-django
+  namespace: ladit
+  labels:
+    app: notejam-django
+spec:
+  ports:
+  - port: 8000
+    targetPort: 8000
+    nodePort: 30070
+    protocol: TCP
+  type: NodePort
+  selector:
+    app: notejam-django
